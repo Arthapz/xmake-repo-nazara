@@ -98,6 +98,10 @@ package("nzsl")
             end
         end
         if not package:is_binary() then
+            local links
+            if not package:config("shared") then
+                links = {"fmt"}
+            end
             assert(package:check_cxxsnippets({test = [[
                 void test() {
                     nzsl::Ast::ModulePtr shaderModule = nzsl::Parse(R"(
@@ -118,6 +122,6 @@ package("nzsl")
                         }
                     )");
                 }
-            ]]}, {configs = {languages = "c++17"}, includes = "NZSL/Parser.hpp"}))
+            ]]}, {configs = {languages = "c++17"}, includes = "NZSL/Parser.hpp", links = links}))
         end
     end)
